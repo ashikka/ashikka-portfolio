@@ -141,9 +141,9 @@ const community = [
 ];
 
 const achievements = [
-  { date: 'Dec 2025', emoji: '📜', text: 'Filed 2 provisional patents under Rapidflare.' },
   { date: 'Apr 2026', emoji: '🥇', text: '1st place — OpenAI Codex Hackathon (3,000 applicants, 100 teams). Built Model Kombat.' },
   { date: 'Apr 2026', emoji: '🥈', text: '2nd place — Opencode Buildathon India (top 100 builders). Built openflip.' },
+  { date: 'Dec 2025', emoji: '📜', text: 'Filed 2 provisional patents under Rapidflare.' },
   { date: 'May 2023', emoji: '🏆', text: 'Chainlink Spring 2023 Hackathon — "Top Quality Projects" (14,000+ registrants, 498 projects).' },
   { date: 'Jun 2022', emoji: '🥈', text: 'NetApp Women Innovathon — 1st Runner Up (3,500 applicants, 900 teams). ₹1.5L cash prize.' },
   { date: 'Jul 2022', emoji: '🎓', text: 'Mitacs Globalink Research — 1 of 283 from 30,000 applicants globally (<1%) for IoT research at UBC Vancouver.' },
@@ -339,7 +339,6 @@ function App() {
 
         <section id="talks">
           <h2>Talks &amp; Conferences</h2>
-
 
           <h3 className="subhead">Short-form on tech</h3>
           <p className="section-note">
