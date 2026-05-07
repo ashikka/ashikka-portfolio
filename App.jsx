@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, animate } from 'framer-motion';
 import { Github, Linkedin, Twitter, Mail, Instagram } from 'lucide-react';
 import './App.css';
@@ -157,52 +157,123 @@ const navItems = [
   { id: 'community', label: 'Community' },
 ];
 
+function pickY() {
+  const yMin = 80;
+  const yMax = Math.max(yMin + 100, (typeof window !== 'undefined' ? window.innerHeight : 800) - 100);
+  return yMin + Math.random() * (yMax - yMin);
+}
+
 function Wanderer() {
-  const x = useMotionValue(-40);
-  const [yPos] = useState(() => {
-    const yMin = 60;
-    const yMax = Math.max(yMin + 100, (typeof window !== 'undefined' ? window.innerHeight : 800) - 100);
-    return yMin + Math.random() * (yMax - yMin);
-  });
+  const x = useMotionValue(-80);
+  const [yPos, setYPos] = useState(pickY);
   const [hovered, setHovered] = useState(false);
-  const paused = hovered;
+  const [started, setStarted] = useState(false);
+  const closeTimer = useRef(null);
+  const openCard = () => {
+    if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; }
+    setHovered(true);
+  };
+  const scheduleClose = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setHovered(false), 150);
+  };
+  const ctrlRef = useRef(null);
+  const offTimerRef = useRef(null);
+  const traverseRef = useRef(null);
+  const pausedRef = useRef(false);
+  const pendingRef = useRef(false);
+
+  useEffect(() => () => closeTimer.current && clearTimeout(closeTimer.current), []);
+
+  // initial delay before the wanderer starts drifting
+  useEffect(() => {
+    const delay = 3500 + Math.random() * 2500;
+    const t = setTimeout(() => setStarted(true), delay);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
-    if (paused) return undefined;
-    const speed = 50; // px / sec — lower is slower
-    const xMin = -40;
-    const xMax = window.innerWidth - 40;
-    const current = x.get();
-    const target = current < (xMin + xMax) / 2 ? xMax : xMin;
-    const other = target === xMax ? xMin : xMax;
-    const span = xMax - xMin;
-    const distToTarget = Math.max(1, Math.abs(target - current));
-    const ctrl = animate(x, [current, target, other], {
-      duration: (distToTarget + span) / speed,
-      times: [0, distToTarget / (distToTarget + span), 1],
-      ease: 'linear',
-      repeat: Infinity,
-      repeatType: 'mirror',
-    });
-    return () => ctrl.stop();
-  }, [paused, x]);
+    if (!started) return undefined;
+    let cancelled = false;
+
+    const traverse = () => {
+      if (cancelled) return;
+      if (pausedRef.current) { pendingRef.current = true; return; }
+      setYPos(pickY());
+      const goingRight = Math.random() > 0.5;
+      const offLeft = -80;
+      const offRight = window.innerWidth + 80;
+      const from = goingRight ? offLeft : offRight;
+      const to = goingRight ? offRight : offLeft;
+      const speed = 70;
+      x.set(from);
+      const c = animate(x, to, {
+        duration: Math.abs(to - from) / speed,
+        ease: 'linear',
+        onComplete: () => {
+          if (cancelled) return;
+          if (pausedRef.current) { pendingRef.current = true; return; }
+          offTimerRef.current = setTimeout(traverse, 1500 + Math.random() * 2500);
+        },
+      });
+      ctrlRef.current = c;
+    };
+    traverseRef.current = traverse;
+    traverse();
+
+    return () => {
+      cancelled = true;
+      if (ctrlRef.current && typeof ctrlRef.current.stop === 'function') ctrlRef.current.stop();
+      if (offTimerRef.current) clearTimeout(offTimerRef.current);
+    };
+  }, [started, x]);
+
+  // pause on hover, resume on un-hover
+  useEffect(() => {
+    if (hovered) {
+      pausedRef.current = true;
+      if (ctrlRef.current && typeof ctrlRef.current.pause === 'function') {
+        ctrlRef.current.pause();
+      }
+      if (offTimerRef.current) {
+        clearTimeout(offTimerRef.current);
+        offTimerRef.current = null;
+        pendingRef.current = true;
+      }
+    } else {
+      pausedRef.current = false;
+      if (ctrlRef.current && typeof ctrlRef.current.play === 'function') {
+        ctrlRef.current.play();
+      }
+      if (pendingRef.current) {
+        pendingRef.current = false;
+        if (traverseRef.current) traverseRef.current();
+      }
+    }
+  }, [hovered]);
 
   return (
     <motion.div
       className="wanderer"
       style={{ x, y: yPos }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
     >
       <button
         type="button"
         className="wanderer-btn"
         aria-label="About the cherry blossom"
+        onMouseEnter={openCard}
+        onMouseLeave={scheduleClose}
+        onFocus={openCard}
+        onBlur={scheduleClose}
       >
         🌸
       </button>
       {hovered && (
-        <div className="wanderer-card">
+        <div
+          className="wanderer-card"
+          onMouseEnter={openCard}
+          onMouseLeave={scheduleClose}
+        >
           <p className="wanderer-name">Sakura</p>
           <p className="wanderer-desc">A symbol of impermanence — beautiful, brief, and worth showing up for.</p>
           <a href="https://en.wikipedia.org/wiki/Cherry_blossom" target="_blank" rel="noopener noreferrer">
@@ -243,15 +314,35 @@ function App() {
 
   useEffect(() => {
     const reprocess = () => window.instgrm && window.instgrm.Embeds.process();
-    if (document.querySelector('script[src="https://www.instagram.com/embed.js"]')) {
+
+    // IG's per-embed fetch is flaky; if one blockquote isn't converted to an
+    // iframe, retry process() a few times until they all are.
+    const allProcessed = () => {
+      const blocks = document.querySelectorAll('blockquote.instagram-media');
+      if (blocks.length === 0) return false;
+      return Array.from(blocks).every((b) => b.querySelector('iframe'));
+    };
+
+    let cancelled = false;
+    const delays = [0, 500, 1500, 3000, 6000];
+    const tick = (i) => {
+      if (cancelled) return;
       reprocess();
-      return;
+      if (allProcessed() || i >= delays.length - 1) return;
+      setTimeout(() => tick(i + 1), delays[i + 1]);
+    };
+
+    if (document.querySelector('script[src="https://www.instagram.com/embed.js"]')) {
+      tick(0);
+    } else {
+      const s = document.createElement('script');
+      s.src = 'https://www.instagram.com/embed.js';
+      s.async = true;
+      s.onload = () => tick(0);
+      document.body.appendChild(s);
     }
-    const s = document.createElement('script');
-    s.src = 'https://www.instagram.com/embed.js';
-    s.async = true;
-    s.onload = reprocess;
-    document.body.appendChild(s);
+
+    return () => { cancelled = true; };
   }, []);
 
   return (
@@ -267,12 +358,13 @@ function App() {
       <main className="container">
         <header className="hero">
           <img className="avatar" src="/avatar.jpg" alt="Ashikka Gupta" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-          <h1>Ashikka Gupta</h1>
-          <p className="tagline">🚀 Founding Engineer @ Rapidflare · ex-PM @ Motorq · Evals nerd</p>
+          <h1>Hi, I'm Ashikka Gupta</h1>
+          <p className="tagline">🚀 Founding Engineer @ Rapidflare · ex-PM @ Motorq · Evals enthusiast</p>
           <p className="bio">
-            At <a href="https://rapidflare.ai" target="_blank" rel="noopener noreferrer">Rapidflare</a>, I’m
-            a founding engineer designing LLM agents and the eval infra that keeps them honest. Previously at Motorq, the youngest PM
-            in the company’s history, where I launched fleet analytics products.
+            At <a href="https://rapidflare.ai" target="_blank" rel="noopener noreferrer">Rapidflare</a>, I’m a founding engineer
+            building AI agents and the eval infrastructure that keeps them reliable. Previously at Motorq, I was
+            the youngest PM in company history, where I launched fleet analytics products.
+            (yes, I am a product manager turned engineer)
           </p>
           <div className="socials">
             <a href="mailto:ashikagupta28@gmail.com" aria-label="Email"><Mail size={18} strokeWidth={1.75} /></a>
