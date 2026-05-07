@@ -358,8 +358,8 @@ function App() {
       <main className="container">
         <header className="hero">
           <img className="avatar" src="/avatar.jpg" alt="Ashikka Gupta" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-          <h1>Hi, I'm Ashikka Gupta</h1>
-          <p className="tagline">🚀 Founding Engineer @ Rapidflare · ex-PM @ Motorq · Evals enthusiast</p>
+          <h1>Hi, I'm Ashikka</h1>
+          <p className="tagline">Founding Engineer @ Rapidflare · ex-PM @ Motorq · Evals enthusiast</p>
           <p className="bio">
             At <a href="https://rapidflare.ai" target="_blank" rel="noopener noreferrer">Rapidflare</a>, I’m a founding engineer
             building AI agents and the eval infrastructure that keeps them reliable. Previously at Motorq, I was
