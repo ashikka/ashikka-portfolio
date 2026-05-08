@@ -46,7 +46,7 @@ const projects = [
     emoji: '🔗',
     title: 'Peer Review',
     desc: 'Decentralized academic publishing on Chainlink — off-chain verification of researcher profiles via Google Scholar.',
-    venue: '🏆 "Top Quality Projects" — Chainlink Spring 2023 Hackathon',
+    venue: '🏆 "First Runner Up" — Netapp Women Innovathon',
     links: [{ label: 'GitHub', url: 'https://github.com/ashikka/peer-review-chainlink' }],
   },
   {
@@ -79,6 +79,12 @@ const writing = [
     desc: 'A practical guide to demystifying prompt engineering and the patterns that consistently work.',
     date: 'Apr 2023',
     url: 'https://ashikka.medium.com/unlocking-the-power-of-llms-the-art-of-prompt-engineering-2-april-2023-3810287f',
+  },
+  {
+    title: 'Do a Bug Bounty with me',
+    desc: 'A practical walkthrough of finding and validating a real bug bounty issue using mobile app analysis tools.',
+    date: 'Jan 2022',
+    url: 'https://ashikka.medium.com/oversimplified-bug-bounty-bad5ac87d947?postPublishedType=repub',
   },
   {
     title: 'Monetizing Twitter The Right Way',
@@ -141,10 +147,11 @@ const community = [
 ];
 
 const achievements = [
-  { date: 'Apr 2026', emoji: '🥇', text: '1st place — OpenAI Codex Hackathon (3,000 applicants, 100 teams). Built Model Kombat.' },
-  { date: 'Apr 2026', emoji: '🥈', text: '2nd place — Opencode Buildathon India (top 100 builders). Built openflip.' },
+  { date: 'Apr 2026', emoji: '🥇', text: '1st place — OpenAI Codex Hackathon (3,000 applicants, top 100 builders). Built Model Kombat.' },
+  { date: 'Apr 2026', emoji: '🥈', text: '2nd place — Opencode Buildathon India (5000 applicants, top 100 builders). Built openflip.' },
   { date: 'Dec 2025', emoji: '📜', text: 'Filed 2 provisional patents under Rapidflare.' },
   { date: 'May 2023', emoji: '🏆', text: 'Chainlink Spring 2023 Hackathon — "Top Quality Projects" (14,000+ registrants, 498 projects).' },
+  { date: 'Oct 2022', emoji: '🥇', text: '1st place — BugeDex Bug Bounty Competition.' },
   { date: 'Jun 2022', emoji: '🥈', text: 'NetApp Women Innovathon — 1st Runner Up (3,500 applicants, 900 teams). ₹1.5L cash prize.' },
   { date: 'Jul 2022', emoji: '🎓', text: 'Mitacs Globalink Research — 1 of 283 from 30,000 applicants globally (<1%) for IoT research at UBC Vancouver.' },
   { date: '2020', emoji: '🏆', text: 'Best Project — MLH Orientation Hack. Built golf-it.' },
@@ -359,7 +366,7 @@ function App() {
         <header className="hero">
           <img className="avatar" src="/avatar.jpg" alt="Ashikka Gupta" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
           <h1>Hi, I'm Ashikka</h1>
-          <p className="tagline">Founding Engineer @ Rapidflare · ex-PM @ Motorq · Evals enthusiast</p>
+          <p className="tagline">Founding Engineer @ Rapidflare · ex-PM @ Motorq</p>
           <p className="bio">
             At <a href="https://rapidflare.ai" target="_blank" rel="noopener noreferrer">Rapidflare</a>, I’m a founding engineer
             building AI agents and the eval infrastructure that keeps them reliable. Previously at Motorq, I was
