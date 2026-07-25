@@ -63,6 +63,18 @@ const projects = [
 
 const writing = [
   {
+    title: 'Your LLM Judge Is Just One More Model to Test',
+    desc: 'Why an off-the-shelf LLM judge needs calibration and tuning like any other model — and how to treat evaluation as a feedback loop.',
+    date: 'July 2026',
+    url: 'https://blog.rapidflare.ai/blog/llm-judge-untested-model/',
+  },
+  {
+    title: 'A Practical Framework for Evaluating AI Agents',
+    desc: 'Building eval cases from assertions, traits, and distractors so you learn not just whether an agent passes, but why and where it breaks.',
+    date: 'June 2026',
+    url: 'https://blog.rapidflare.ai/blog/designing-eval-cases/',
+  },
+  {
     title: 'Building LLM Autocomplete for Electronics Agents',
     desc: 'How we shipped fast, accurate inline autocomplete for technical product search at Rapidflare.',
     date: 'March 2026',
