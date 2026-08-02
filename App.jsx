@@ -66,7 +66,7 @@ const writing = [
     title: 'Building a Benchmark for Product Image Search',
     desc: 'Grading every product in a catalogue against 96 queries, then putting eight models and four retrievers through the same harness to see where one-shot retrieval breaks.',
     date: 'August 2026',
-    url: '/blog/fashion-search-benchmark/',
+    url: '/blog/product-image-search-benchmark/',
   },
   {
     title: 'Your LLM Judge Is Just One More Model to Test',
