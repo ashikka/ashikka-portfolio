@@ -243,8 +243,7 @@ search. Fine-tuning comes later.</p>
 <p>I used a catalogue of 3,081 Zara and H&amp;M products from two Kaggle
 datasets, generated 96 search queries from the product photos. Then I built a simple
 harness that gives a model four search tools over the catalogue (<code>keyword_search</code>,
-<code>semantic_search</code> over a text embedding, and a fashion image embedding you can
-search with text via <code>image_text_search</code> or with a photo via
+<code>semantic_search</code> over a text embedding, and a product image embedding you can search with text via <code>image_text_search</code> or with a photo via
 <code>similar_images</code>) and ran the evaluation.</p>
 
 <ul class="body">
@@ -288,8 +287,7 @@ the same query.</p>
 shared vector space so that a product photo and a natural-language description of it land near
 each other. The model used here is
 <a href="https://huggingface.co/Marqo/marqo-fashionSigLIP">Marqo/marqo-fashionSigLIP</a>:
-SigLIP trained by Google as a more efficient CLIP variant, then fine-tuned by Marqo on fashion
-product data. Because the model already has strong garment vocabulary, the interesting failures
+SigLIP trained by Google as a more efficient CLIP variant, then fine-tuned by Marqo on clothing product data. Because the model already has strong garment vocabulary, the interesting failures
 tend to be fine-grained (cut, fit, exclusions) rather than basic category mistakes.</p>
 
 <h2>Task generation</h2>
@@ -519,8 +517,7 @@ where a production search box needs to sit on cost and latency.</p>
 
 <h2>Conclusion</h2>
 
-<p>We presented a small agentic fashion-search evaluation over a catalogue of Zara and H&amp;M
-products: 96 synthetic queries, offline relevance labels, shared retrieval indexes, and eight
+<p>We presented a small agentic product image search evaluation over a catalogue of Zara and H&amp;M products: 96 synthetic queries, offline relevance labels, shared retrieval indexes, and eight
 models on the same tool harness. Under identical tools and labels, Claude Opus 5 leads
 Qwen3.5-9B by 0.22 nDCG.</p>
 
