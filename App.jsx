@@ -63,6 +63,12 @@ const projects = [
 
 const writing = [
   {
+    title: 'Building a Benchmark for Product Image Search',
+    desc: 'Grading every product in a catalogue against 96 queries, then putting eight models and four retrievers through the same harness to see where one-shot retrieval breaks.',
+    date: 'August 2026',
+    url: '/blog/fashion-search-benchmark/',
+  },
+  {
     title: 'Your LLM Judge Is Just One More Model to Test',
     desc: 'Why an off-the-shelf LLM judge needs calibration and tuning like any other model — and how to treat evaluation as a feedback loop.',
     date: 'July 2026',
@@ -431,7 +437,13 @@ function App() {
           <ul className="entry-list">
             {visibleWriting.map((w) => (
               <li key={w.url}>
-                <a href={w.url} target="_blank" rel="noopener noreferrer" className="entry-title">
+                <a
+                  href={w.url}
+                  {...(w.url.startsWith('/')
+                    ? {}
+                    : { target: '_blank', rel: 'noopener noreferrer' })}
+                  className="entry-title"
+                >
                   {w.title}
                 </a>
                 {w.desc && <p className="entry-desc">{w.desc}</p>}
