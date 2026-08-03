@@ -344,7 +344,7 @@ p.fn code { font-size:11.5px; }
 
 <p>For visual retrieval, I chose Marqo FashionSigLIP because it is trained specifically for fashion and supports both text-to-image and image-to-image search. This makes it useful for matching details such as colour, silhouette and cut that may be missing from the product description.</p>
 
-<p>For semantic text retrieval, I used BGE-small-en-v1.5 over product titles and descriptions. I chose it as a lightweight and practical baseline that can connect related wording even when the query does not use the exact terms found in the catalog. I ran both embedding models through fal.ai’s serverless inference platform, which let me deploy and query them without managing GPU infrastructure.</p>
+<p>For semantic text retrieval, I used BGE-small-en-v1.5 over product titles and descriptions. I chose it as a lightweight and practical baseline that can connect related wording even when the query does not use the exact terms found in the catalog. I ran both embedding models through <a href="https://fal.ai">fal.ai’s</a> serverless inference platform, which let me deploy and query them without managing GPU infrastructure.</p>
 
 <p>BM25 provides the complementary lexical baseline. It works well when the query contains specific words that appear directly in a product title or description.</p>
 
