@@ -437,6 +437,17 @@ p.fn code { font-size:11.5px; }
 
 <p>Several smaller models behave more cautiously and inspect close to one photograph for every product they eventually submit. This protects precision, but it also limits how broadly they can search before exhausting their inspection budget.</p>
 
+<h2>Conclusion</h2>
+
+<p>The most interesting result was that larger models also showed distinct and informative differences in how they approached search.</p>
+
+<p>Opus explored more of the catalogue and returned a broader set of relevant products. Qwen3.5-9B was often just as good at recognising a match once it found one, but it tended to stop after building a small, high-confidence shortlist.</p>
+
+<p>One reason may be the way each search tool presents information. In this catalogue, product descriptions are often sparse, with details like colour, cut and smaller design features visible only in the image. Opus used visual search for about 37% of its calls, while Qwen relied more on keyword search. Keyword results are easier to judge from titles and metadata alone. Visual results, on the other hand, usually require inspecting an image and, with a limited inspection budget, the smaller model may therefore prefer the tool that gives it usable information immediately, even when that information is incomplete.</p>
+
+<p>Qwen also seems to treat a clean shortlist as a finished answer, which is a reasonable habit for a general assistant, where returning a few strong options is often enough. In this benchmark, however, it loses recall because the model is rewarded for finding as much of the relevant set as possible.</p>
+
+<p>This makes Qwen an interesting model to fine-tune. It does not need to relearn what a relevant product looks like. It mainly needs to search more broadly, recognise when the result set is incomplete and avoid stopping after the first few good matches. In the next post, I’ll use reinforcement learning to target that behaviour while trying to preserve the model’s precision and cost advantage.</p>
 
 <h2>Future directions</h2>
 
@@ -451,14 +462,6 @@ p.fn code { font-size:11.5px; }
 <h3>Indexes and cost</h3>
 
 <p>There is also room to improve the retrieval system itself. The search policy and indexes were developed independently in this experiment, so the model is learning to work with a fixed combination of BM25, BGE and FashionSigLIP. Training the visual index around the queries the agent actually issues, or adding inexpensive filters for attributes such as size and availability, could improve retrieval while reducing the number of product photographs the model needs to inspect. Cost and latency will need much more work as well, since none of the systems tested here is yet practical for a production search experience.</p>
-
-<h2>Conclusion</h2>
-
-<p>The most interesting result from this benchmark was not simply that larger models performed better, but that they approached the same search problem in noticeably different ways. Opus searched more broadly, used the visual index more often and returned a more complete set of relevant products, while Qwen3.5-9B was highly precise but often stopped after finding only a handful of good matches.</p>
-
-<p>This suggests that Qwen’s main limitation is not its ability to recognise relevance. It already does that well. The larger gap is in its search policy: deciding when to reformulate a query, when to try another retrieval tool and when the current result set is not yet complete.</p>
-
-<p>That makes it a useful model to fine-tune because the behaviour that needs to change is relatively specific. In the next post, I’ll use reinforcement learning to encourage broader search and higher recall, while trying to preserve the precision and cost advantage that make the smaller model interesting in the first place.</p>
 
 <h2>References</h2>
 
