@@ -176,8 +176,8 @@ const achievements = [
 ];
 
 const navItems = [
-  { id: 'projects', label: 'Projects' },
   { id: 'writing', label: 'Writing' },
+  { id: 'projects', label: 'Projects' },
   { id: 'talks', label: 'Talks' },
   { id: 'community', label: 'Community' },
 ];
@@ -400,6 +400,34 @@ function App() {
           </div>
         </header>
 
+        <section id="writing">
+          <h2>Writing</h2>
+          <ul className="entry-list">
+            {visibleWriting.map((w) => (
+              <li key={w.url}>
+                <a
+                  href={w.url}
+                  {...(w.url.startsWith('/')
+                    ? {}
+                    : { target: '_blank', rel: 'noopener noreferrer' })}
+                  className="entry-title"
+                >
+                  {w.title}
+                </a>
+                {w.desc && <p className="entry-desc">{w.desc}</p>}
+                <p className="entry-date">{w.date}</p>
+              </li>
+            ))}
+          </ul>
+          {writing.length > 3 && (
+            <div className="view-more-wrap">
+              <button className="view-more" onClick={() => setShowAllWriting((v) => !v)}>
+                {showAllWriting ? 'Show Less' : 'View More'}
+              </button>
+            </div>
+          )}
+        </section>
+
         <section id="projects">
           <h2>Projects</h2>
           <div className="cards">
@@ -427,34 +455,6 @@ function App() {
             <div className="view-more-wrap">
               <button className="view-more" onClick={() => setShowAllProjects((v) => !v)}>
                 {showAllProjects ? 'Show Less' : 'View More'}
-              </button>
-            </div>
-          )}
-        </section>
-
-        <section id="writing">
-          <h2>Writing</h2>
-          <ul className="entry-list">
-            {visibleWriting.map((w) => (
-              <li key={w.url}>
-                <a
-                  href={w.url}
-                  {...(w.url.startsWith('/')
-                    ? {}
-                    : { target: '_blank', rel: 'noopener noreferrer' })}
-                  className="entry-title"
-                >
-                  {w.title}
-                </a>
-                {w.desc && <p className="entry-desc">{w.desc}</p>}
-                <p className="entry-date">{w.date}</p>
-              </li>
-            ))}
-          </ul>
-          {writing.length > 3 && (
-            <div className="view-more-wrap">
-              <button className="view-more" onClick={() => setShowAllWriting((v) => !v)}>
-                {showAllWriting ? 'Show Less' : 'View More'}
               </button>
             </div>
           )}
